@@ -11,18 +11,32 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 
 import android.content.Intent;
+import android.os.SystemClock;
 
+import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
 import androidx.test.espresso.intent.Intents;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 import androidx.test.rule.ActivityTestRule;
 
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class EspressoTest {
+    @Before // Выполняется перед тестами
+    public void registerIdlingResources() {
+        IdlingRegistry.getInstance().register(EspressoIdlingResources.idlingResource);
+    }
+
+    @After // Выполняется после тестов
+    public void unregisterIdlingResources() {
+        IdlingRegistry.getInstance().unregister(EspressoIdlingResources.idlingResource);
+    }
+
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -55,10 +69,26 @@ public class EspressoTest {
         );
         Intents.init();
         elementText.perform(click());
-        //Проверяем intent, он должен передавать url и action
-        //Intents..
         intended(hasData("https://google.com"));
         intended(hasAction(Intent.ACTION_VIEW));
         Intents.release();
+    }
+
+    @Test
+    public void testIncrement() {
+        ViewInteraction element = onView(
+                withContentDescription("Open navigation drawer")
+        );
+        element.perform(click());
+        ViewInteraction gallery = onView(withText("Gallery"));
+        gallery.perform(click());
+        ViewInteraction item_7 = onView(
+                withText("7")
+        );
+        item_7.check(
+                matches(
+                        withText("7")
+                )
+        );
     }
 }
