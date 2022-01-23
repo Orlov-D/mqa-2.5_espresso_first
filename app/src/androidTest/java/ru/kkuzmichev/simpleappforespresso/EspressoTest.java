@@ -6,12 +6,13 @@ import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasData;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.CoreMatchers.allOf;
 
 import android.content.Intent;
-import android.os.SystemClock;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.ViewInteraction;
@@ -82,13 +83,7 @@ public class EspressoTest {
         element.perform(click());
         ViewInteraction gallery = onView(withText("Gallery"));
         gallery.perform(click());
-        ViewInteraction item_7 = onView(
-                withText("7")
-        );
-        item_7.check(
-                matches(
-                        withText("7")
-                )
-        );
+        ViewInteraction item_7 = onView(allOf(withId(R.id.item_number), withText("7")));
+        item_7.check(matches(isDisplayed()));
     }
 }
