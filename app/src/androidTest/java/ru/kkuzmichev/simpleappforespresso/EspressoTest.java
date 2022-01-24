@@ -80,8 +80,10 @@ public class EspressoTest {
         ViewInteraction element = onView(
                 withContentDescription("Open navigation drawer")
         );
+        element.check(matches(isDisplayed()));
         element.perform(click());
         ViewInteraction gallery = onView(withText("Gallery"));
+        gallery.check(matches(isDisplayed()));
         gallery.perform(click());
         ViewInteraction item_7 = onView(allOf(withId(R.id.item_number), withText("7")));
         item_7.check(matches(isDisplayed()));
